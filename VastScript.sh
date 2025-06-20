@@ -214,9 +214,9 @@ function provisioning_download() {
         auth_token="$CIVITAI_TOKEN"
     fi
     if [[ -n $auth_token ]];then
-        aria2c --header="Authorization: Bearer $auth_token" -x 16 -s 16 -k 1M -o "$2" "$1"
+        aria2c --header="Authorization: Bearer $auth_token" -x 16 -j 16 -k 1M -o "$filename"
     else
-        aria2c -x 16 -s 16 -k 1M -o "$2" "$1"
+        aria2c -x 16 -j 16 -k 1M -o "$filename" 
     fi
 }
 
