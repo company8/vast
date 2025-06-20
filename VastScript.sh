@@ -5,6 +5,8 @@ COMFYUI_DIR=${WORKSPACE}/ComfyUI
 
 # Packages are installed after nodes so we can fix them...
 
+DEFAULT_WORKFLOW="https://raw.githubusercontent.com/ClownsharkBatwing/RES4LYF/refs/heads/main/example_workflows/hidream%20txt2img.json"
+
 APT_PACKAGES=(
 	"aria2"
 )
@@ -28,7 +30,7 @@ NODES=(
 )
 
 WORKFLOWS=(
-	"https://github.com/ClownsharkBatwing/RES4LYF/blob/main/example_workflows/hidream%20txt2img.json"
+	"https://raw.githubusercontent.com/ClownsharkBatwing/RES4LYF/refs/heads/main/example_workflows/hidream%20txt2img.json"
 )
 
 INPUT=(
