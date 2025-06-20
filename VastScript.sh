@@ -16,11 +16,11 @@ PIP_PACKAGES=(
 
 NODES=(
 	"https://github.com/Comfy-Org/ComfyUI-Manager"
-    "https://github.com/city96/ComfyUI-GGUF"
-    "https://github.com/kijai/ComfyUI-KJNodes"
-    "https://github.com/kijai/ComfyUI-WanVideoWrapper"
+    	"https://github.com/city96/ComfyUI-GGUF"
+    	"https://github.com/kijai/ComfyUI-KJNodes"
+    	"https://github.com/kijai/ComfyUI-WanVideoWrapper"
 	"https://github.com/aria1th/ComfyUI-LogicUtils"
-    "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite"
+	"https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite"
 	"https://github.com/ClownsharkBatwing/RES4LYF"
 	"https://github.com/rgthree/rgthree-comfy"
 	# This repo is in maintenance
@@ -28,19 +28,19 @@ NODES=(
 )
 
 WORKFLOWS=(
-    "https://github.com/ClownsharkBatwing/RES4LYF/blob/main/example_workflows/hidream%20txt2img.json"
+	"https://github.com/ClownsharkBatwing/RES4LYF/blob/main/example_workflows/hidream%20txt2img.json"
 )
 
 INPUT=(
-    "https://comfyanonymous.github.io/ComfyUI_examples/hidream/hidream_dev_example.png"
+	"https://comfyanonymous.github.io/ComfyUI_examples/hidream/hidream_dev_example.png"
 )
 
 CHECKPOINT_MODELS=(
-    "https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/diffusion_models/hidream_i1_dev_bf16.safetensors"
+	"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/diffusion_models/hidream_i1_dev_bf16.safetensors"
 )
 
 CLIP_MODELS=(
-    "https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/clip_g_hidream.safetensors"
+	"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/clip_g_hidream.safetensors"
 	"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/clip_l_hidream.safetensors"
 	"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/llama_3.1_8b_instruct_fp8_scaled.safetensors"
 	"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/t5xxl_fp8_e4m3fn_scaled.safetensors"
