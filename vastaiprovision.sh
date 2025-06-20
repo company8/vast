@@ -17,11 +17,11 @@ PIP_PACKAGES=(
 
 NODES=(
 	"https://github.com/Comfy-Org/ComfyUI-Manager"
-    "https://github.com/city96/ComfyUI-GGUF"
-    "https://github.com/kijai/ComfyUI-KJNodes"
-    "https://github.com/kijai/ComfyUI-WanVideoWrapper"
+    	"https://github.com/city96/ComfyUI-GGUF"
+    	"https://github.com/kijai/ComfyUI-KJNodes"
+    	"https://github.com/kijai/ComfyUI-WanVideoWrapper"
 	"https://github.com/aria1th/ComfyUI-LogicUtils"
-    "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite"
+ 	"https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite"
 	"https://github.com/ClownsharkBatwing/RES4LYF"
 	"https://github.com/rgthree/rgthree-comfy"
 	# This repo is in maintenance
