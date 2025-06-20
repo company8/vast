@@ -222,13 +222,13 @@ function provisioning_download() {
     if [[ -n $auth_token && $1 =~ ^https://([a-zA-Z0-9_-]+\.)?huggingface\.co(/|$|\?) ]]; then
         final_url=$(curl -H "Authorization: Bearer $auth_token" -s -L -I -w '%{url_effective}' -o /dev/null "$1")
         filename=$(curl -H "Authorization: Bearer $auth_token" -s -L -I "$final_url" | grep -i 'content-disposition' | sed -n 's/.*filename\*=UTF-8''//;s/.*filename="//;s/";//p')
-        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc --header="Authorization: Bearer $auth_token" --dir="$2" -o "$filename" "$final_url"
+        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc --header="Authorization: Bearer $auth_token" --dir="$2" -o "$filename" "$final_url" --optimize-concurrent-downloads=true --check-certificate=false
     elif [[ -n $auth_token && $1 =~ ^https://([a-zA-Z0-9_-]+\.)?civitai\.com(/|$|\?) ]]; then
         final_url=$(curl -H "Authorization: Bearer $auth_token" -s -L -I -w '%{url_effective}' -o /dev/null "$1")
-        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc --dir="$2" "$final_url"
+        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc --dir="$2" "$final_url" --optimize-concurrent-downloads=true --check-certificate=false
     else
         # Fallback for normal URLs (e.g. githubusercontent, gh-pages)
-        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc --dir="$2" "$final_url"
+        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc --dir="$2" "$final_url"  --optimize-concurrent-downloads=true --check-certificate=false
     fi
 }
 
