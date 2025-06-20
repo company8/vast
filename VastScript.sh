@@ -142,42 +142,63 @@ provisioning_update_comfyui() {
     fi
 }
 
+# Set to "true" for verbose output
+DEBUG_MODE=false
+DOWNLOAD_LOG="/tmp/nodes_logs.log"
+MAX_RETRIES=1
+
 function provisioning_get_nodes() {
     total=${#NODES[@]}
     index=1
+
     for repo in "${NODES[@]}"; do
         dir="${repo##*/}"
         path="${COMFYUI_DIR}/custom_nodes/${dir}"
         requirements="${path}/requirements.txt"
         
-        printf "[%2d/%2d] " "$index" "$total"
-        
+        printf "[%2d/%2d] " "$index" "$total" | tee -a "$DOWNLOAD_LOG"
+
         if [[ -d $path ]]; then
             if [[ ${AUTO_UPDATE,,} != "false" ]]; then
-                echo "Updating node: $dir"
-                ( cd "$path" && git pull )
+                echo "Updating node: $dir" | tee -a "$DOWNLOAD_LOG"
+                ( cd "$path" && git pull >>"$DOWNLOAD_LOG" 2>&1 )
                 if [[ -e $requirements ]]; then
-                    pip install --no-cache-dir -r "$requirements"
+                    pip install --no-cache-dir -r "$requirements" >>"$DOWNLOAD_LOG" 2>&1
                 fi
+                echo "✅ Success: $dir" | tee -a "$DOWNLOAD_LOG"
             else
-                echo "Skipping update for node: $dir"
+                echo "Skipping update for node: $dir" | tee -a "$DOWNLOAD_LOG"
             fi
         else
-            echo "Cloning node: $dir"
-            git clone "$repo" "$path" --recursive
-            if [[ -e $requirements ]]; then
-                pip install --no-cache-dir -r "$requirements"
+            echo "Cloning node: $dir" | tee -a "$DOWNLOAD_LOG"
+            retries=0
+            success=false
+            until $success || ((retries >= MAX_RETRIES)); do
+                if git clone "$repo" "$path" --recursive >>"$DOWNLOAD_LOG" 2>&1; then
+                    if [[ -e $requirements ]]; then
+                        pip install --no-cache-dir -r "$requirements" >>"$DOWNLOAD_LOG" 2>&1
+                    fi
+                    echo "✅ Success: $dir" | tee -a "$DOWNLOAD_LOG"
+                    success=true
+                else
+                    ((retries++))
+                    echo "⚠️  Retry $retries/$MAX_RETRIES for: $dir" | tee -a "$DOWNLOAD_LOG"
+                fi
+            done
+
+            if ! $success; then
+                echo "❌ Failed to clone: $dir after $MAX_RETRIES attempts" | tee -a "$DOWNLOAD_LOG"
             fi
         fi
-        
+
         ((index++))
     done
 }
 
 # Set to "true" for verbose output
 DEBUG_MODE=false
-DOWNLOAD_LOG="/tmp/provisioning_downloads.log"
-MAX_RETRIES=3
+DOWNLOAD_LOG="/tmp/models_logs.log"
+MAX_RETRIES=1
 
 function provisioning_get_files() {
     if [[ -z $2 ]]; then return 1; fi
@@ -216,7 +237,6 @@ function provisioning_get_files() {
                 else
                     ((retries++))
                     echo "⚠️  Retry $retries/$MAX_RETRIES for: $filename" | tee -a "$DOWNLOAD_LOG"
-                    sleep 1
                 fi
             done
 
@@ -233,7 +253,7 @@ function provisioning_print_header() {
 }
 
 function provisioning_print_end() {
-    printf "\nProvisioning complete:  Application will start now\n\n"
+    printf "\n✅ Success: ComfyUi will start in a moment.\n\n"
 }
 
 function provisioning_has_valid_hf_token() {
