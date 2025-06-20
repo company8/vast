@@ -1,6 +1,9 @@
 #!/bin/bash
 
 source /venv/main/bin/activate
+
+APT_INSTALL="apt-get install -y"
+
 COMFYUI_DIR=${WORKSPACE}/ComfyUI
 
 # Packages are installed after nodes so we can fix them...
