@@ -232,11 +232,11 @@ function provisioning_get_files() {
             success=false
             until $success || ((retries >= MAX_RETRIES)); do
                 if provisioning_download "$url" "$dir" >>"$DOWNLOAD_LOG" 2>&1; then
-                    $DEBUG_MODE && echo "✅ Success: $filename"
+                    echo "✅ Success: $filename" | tee -a "$DOWNLOAD_LOG"
                     success=true
                 else
                     ((retries++))
-                    echo "⚠️  Retry $retries/$MAX_RETRIES for: $filename" | tee -a "$DOWNLOAD_LOG"
+                    echo "⚠️ Retry $retries/$MAX_RETRIES for: $filename" | tee -a "$DOWNLOAD_LOG"
                 fi
             done
 
