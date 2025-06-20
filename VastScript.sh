@@ -228,7 +228,7 @@ function provisioning_download() {
         aria2c -x 16 -s 16 -k 10M --max-tries=0 -c --file-allocation=falloc --dir="$2" "$final_url"
     else
         # Fallback for normal URLs (e.g. githubusercontent, gh-pages)
-        aria2c -x 16 -s 16 -k 10M --max-tries=0 -c --file-allocation=falloc --dir="$2" "$1"
+        aria2c -x 16 -s 16 -k 10M --max-tries=0 -c --file-allocation=falloc --dir="$2" "$final_url"
     fi
 }
 
