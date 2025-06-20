@@ -67,17 +67,8 @@ CONTROLNET_MODELS=(
 function provisioning_start() {
     provisioning_print_header
     provisioning_get_apt_packages
-    provisioning_update_comfyui
     provisioning_get_nodes
     provisioning_get_pip_packages
-    workflows_dir="${COMFYUI_DIR}/user/default/workflows"
-    mkdir -p "${workflows_dir}"
-    provisioning_get_files \
-        "${workflows_dir}" \
-        "${WORKFLOWS[@]}"
-    provisioning_get_files \
-        "${COMFYUI_DIR}/input" \
-        "${INPUT[@]}"
     provisioning_get_files \
         "${COMFYUI_DIR}/models/checkpoints" \
         "${CHECKPOINT_MODELS[@]}"
@@ -90,9 +81,6 @@ function provisioning_start() {
     provisioning_get_files \
         "${COMFYUI_DIR}/models/controlnet" \
         "${CONTROLNET_MODELS[@]}"
-    provisioning_get_files \
-        "${COMFYUI_DIR}/models/clip" \
-        "${CLIP_MODELS[@]}"
     provisioning_get_files \
         "${COMFYUI_DIR}/models/vae" \
         "${VAE_MODELS[@]}"
@@ -114,23 +102,10 @@ function provisioning_get_pip_packages() {
     fi
 }
 
-# We must be at release tag v0.3.34 or greater for fp8 support
-provisioning_update_comfyui() {
-    required_tag="v0.3.34"
-    cd ${COMFYUI_DIR}
-    git fetch --all --tags
-    current_commit=$(git rev-parse HEAD)
-    required_commit=$(git rev-parse "$required_tag")
-    if git merge-base --is-ancestor "$current_commit" "$required_commit"; then
-        git checkout "$required_tag"
-        pip install --no-cache-dir -r requirements.txt
-    fi
-}
-
 function provisioning_get_nodes() {
     for repo in "${NODES[@]}"; do
         dir="${repo##*/}"
-        path="${COMFYUI_DIR}/custom_nodes/${dir}"
+        path="${COMFYUI_DIR}custom_nodes/${dir}"
         requirements="${path}/requirements.txt"
         if [[ -d $path ]]; then
             if [[ ${AUTO_UPDATE,,} != "false" ]]; then
