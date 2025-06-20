@@ -8,8 +8,6 @@ COMFYUI_DIR=${WORKSPACE}/ComfyUI
 
 # Packages are installed after nodes so we can fix them...
 
-DEFAULT_WORKFLOW="https://raw.githubusercontent.com/ClownsharkBatwing/RES4LYF/refs/heads/main/example_workflows/hidream%20txt2img.json"
-
 APT_PACKAGES=(
 	"aria2"
 )
@@ -32,19 +30,20 @@ NODES=(
 	"https://github.com/cubiq/ComfyUI_essentials"
 )
 
-WORKFLOWS=(
+DEFAULT_WORKFLOWS=(
 	"https://raw.githubusercontent.com/ClownsharkBatwing/RES4LYF/refs/heads/main/example_workflows/hidream%20txt2img.json"
+	"https://raw.githubusercontent.com/ClownsharkBatwing/RES4LYF/refs/heads/main/example_workflows/hidream%20style%20transfer%20txt2img.json"
 )
 
 INPUT=(
 	"https://comfyanonymous.github.io/ComfyUI_examples/hidream/hidream_dev_example.png"
 )
 
-CHECKPOINT_MODELS=(
+DIFFUSION_MODELS=(
 	"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/diffusion_models/hidream_i1_dev_bf16.safetensors"
 )
 
-CLIP_MODELS=(
+TEXT_ENCODERS=(
 	"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/clip_g_hidream.safetensors"
 	"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/clip_l_hidream.safetensors"
 	"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/llama_3.1_8b_instruct_fp8_scaled.safetensors"
@@ -70,6 +69,7 @@ CONTROLNET_MODELS=(
 ### DO NOT EDIT BELOW HERE UNLESS YOU KNOW WHAT YOU ARE DOING ###
 
 function provisioning_start() {
+    provisioning_get_default_workflows
     provisioning_print_header
     provisioning_get_apt_packages
     provisioning_update_comfyui
@@ -79,13 +79,13 @@ function provisioning_start() {
     mkdir -p "${workflows_dir}"
     provisioning_get_files \
         "${workflows_dir}" \
-        "${WORKFLOWS[@]}"
+        "${DEFAULT_WORKFLOWS[@]}"
     provisioning_get_files \
         "${COMFYUI_DIR}/input" \
         "${INPUT[@]}"
     provisioning_get_files \
-        "${COMFYUI_DIR}/models/checkpoints" \
-        "${CHECKPOINT_MODELS[@]}"
+        "${COMFYUI_DIR}/models/diffusion_models" \
+        "${DIFFUSION_MODELS[@]}"
     provisioning_get_files \
         "${COMFYUI_DIR}/models/unet" \
         "${UNET_MODELS[@]}"
@@ -96,8 +96,8 @@ function provisioning_start() {
         "${COMFYUI_DIR}/models/controlnet" \
         "${CONTROLNET_MODELS[@]}"
     provisioning_get_files \
-        "${COMFYUI_DIR}/models/clip" \
-        "${CLIP_MODELS[@]}"
+        "${COMFYUI_DIR}/models/text_encoders" \
+        "${TEXT_ENCODERS[@]}"
     provisioning_get_files \
         "${COMFYUI_DIR}/models/vae" \
         "${VAE_MODELS[@]}"
@@ -105,6 +105,16 @@ function provisioning_start() {
         "${COMFYUI_DIR}/models/esrgan" \
         "${ESRGAN_MODELS[@]}"
     provisioning_print_end
+}
+
+function provisioning_get_default_workflows() {
+    for wf in "${DEFAULT_WORKFLOWS[@]}"; do
+        workflow_json=$(curl -s "$wf")
+        if [[ -n $workflow_json ]]; then
+            echo "export const defaultGraph = $workflow_json;" > /opt/ComfyUI/web/scripts/defaultGraph.js
+            break
+        fi
+    done
 }
 
 function provisioning_get_apt_packages() {
@@ -120,6 +130,7 @@ function provisioning_get_pip_packages() {
 }
 
 # We must be at release tag v0.3.34 or greater for fp8 support
+
 provisioning_update_comfyui() {
     required_tag="v0.3.34"
     cd ${COMFYUI_DIR}
@@ -133,25 +144,34 @@ provisioning_update_comfyui() {
 }
 
 function provisioning_get_nodes() {
+    total=${#NODES[@]}
+    index=1
     for repo in "${NODES[@]}"; do
         dir="${repo##*/}"
         path="${COMFYUI_DIR}/custom_nodes/${dir}"
         requirements="${path}/requirements.txt"
+        
+        printf "[%2d/%2d] " "$index" "$total"
+        
         if [[ -d $path ]]; then
             if [[ ${AUTO_UPDATE,,} != "false" ]]; then
-                printf "Updating node: %s...\n" "${repo}"
+                echo "Updating node: $dir"
                 ( cd "$path" && git pull )
                 if [[ -e $requirements ]]; then
-                   pip install --no-cache-dir -r "$requirements"
+                    pip install --no-cache-dir -r "$requirements"
                 fi
+            else
+                echo "Skipping update for node: $dir"
             fi
         else
-            printf "Downloading node: %s...\n" "${repo}"
-            git clone "${repo}" "${path}" --recursive
+            echo "Cloning node: $dir"
+            git clone "$repo" "$path" --recursive
             if [[ -e $requirements ]]; then
-                pip install --no-cache-dir -r "${requirements}"
+                pip install --no-cache-dir -r "$requirements"
             fi
         fi
+        
+        ((index++))
     done
 }
 
@@ -165,8 +185,7 @@ function provisioning_get_files() {
     printf "Downloading %s model(s) to %s...\n" "${#arr[@]}" "$dir"
     for url in "${arr[@]}"; do
         printf "Downloading: %s\n" "${url}"
-        provisioning_download "${url}" "${dir}"
-        printf "\n"
+        provisioning_download "${url}" "${dir}" &
     done
 }
 
@@ -209,6 +228,7 @@ function provisioning_has_valid_civitai_token() {
         return 1
     fi
 }
+
 # Download from $1 URL to $2 file path
 function provisioning_download() {
     if [[ -n $HF_TOKEN && $1 =~ ^https://([a-zA-Z0-9_-]+\.)?huggingface\.co(/|$|\?) ]]; then
@@ -235,7 +255,7 @@ function provisioning_download() {
         final_url=$(curl -H "Authorization: Bearer $auth_token" -s -L -I -w '%{url_effective}' -o /dev/null "$1")
         filename=$(basename "$final_url")
 
-        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc \
+        aria2c -x 16 -j 8 -k 10M --max-tries=0 -c --file-allocation=falloc \
             --header="Authorization: Bearer $auth_token" \
             --dir="$2" -o "$filename" "$final_url" \
             --optimize-concurrent-downloads=true
@@ -243,11 +263,12 @@ function provisioning_download() {
     else
         # Fallback for public URLs
         filename=$(basename "$1")
-        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc \
+        aria2c -x 16 -j 8 -k 10M --max-tries=0 -c --file-allocation=falloc \
             --dir="$2" -o "$filename" "$1" \
             --optimize-concurrent-downloads=true
     fi
 }
+
 # Allow user to disable provisioning if they started with a script they didn't want
 if [[ ! -f /.noprovisioning ]]; then
     provisioning_start
