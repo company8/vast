@@ -209,30 +209,45 @@ function provisioning_has_valid_civitai_token() {
         return 1
     fi
 }
-
 # Download from $1 URL to $2 file path
 function provisioning_download() {
     if [[ -n $HF_TOKEN && $1 =~ ^https://([a-zA-Z0-9_-]+\.)?huggingface\.co(/|$|\?) ]]; then
         auth_token="$HF_TOKEN"
-    elif 
-        [[ -n $CIVITAI_TOKEN && $1 =~ ^https://([a-zA-Z0-9_-]+\.)?civitai\.com(/|$|\?) ]]; then
+    elif [[ -n $CIVITAI_TOKEN && $1 =~ ^https://([a-zA-Z0-9_-]+\.)?civitai\.com(/|$|\?) ]]; then
         auth_token="$CIVITAI_TOKEN"
     fi
 
     if [[ -n $auth_token && $1 =~ ^https://([a-zA-Z0-9_-]+\.)?huggingface\.co(/|$|\?) ]]; then
         final_url=$(curl -H "Authorization: Bearer $auth_token" -s -L -I -w '%{url_effective}' -o /dev/null "$1")
-        filename=$(curl -H "Authorization: Bearer $auth_token" -s -L -I "$final_url" | grep -i 'content-disposition' | sed -n 's/.*filename\*=UTF-8''//;s/.*filename="//;s/";//p')
-        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc --header="Authorization: Bearer $auth_token" --dir="$2" -o "$filename" "$final_url" --optimize-concurrent-downloads=true --check-certificate=false
+        filename=$(curl -H "Authorization: Bearer $auth_token" -s -L -I "$final_url" \
+            | grep -i 'content-disposition' \
+            | sed -n 's/.*filename\*=UTF-8''//;s/.*filename="//;s/";//p')
+
+        # Fallback if filename is empty
+        [[ -z "$filename" ]] && filename=$(basename "$final_url")
+
+        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc \
+            --header="Authorization: Bearer $auth_token" \
+            --dir="$2" -o "$filename" "$final_url" \
+            --optimize-concurrent-downloads=true
+
     elif [[ -n $auth_token && $1 =~ ^https://([a-zA-Z0-9_-]+\.)?civitai\.com(/|$|\?) ]]; then
         final_url=$(curl -H "Authorization: Bearer $auth_token" -s -L -I -w '%{url_effective}' -o /dev/null "$1")
-        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc --dir="$2" "$final_url" --optimize-concurrent-downloads=true --check-certificate=false
+        filename=$(basename "$final_url")
+
+        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc \
+            --header="Authorization: Bearer $auth_token" \
+            --dir="$2" -o "$filename" "$final_url" \
+            --optimize-concurrent-downloads=true
+
     else
-        # Fallback for normal URLs (e.g. githubusercontent, gh-pages)
-        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc --dir="$2" "$final_url"  --optimize-concurrent-downloads=true --check-certificate=false
+        # Fallback for public URLs
+        filename=$(basename "$1")
+        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc \
+            --dir="$2" -o "$filename" "$1" \
+            --optimize-concurrent-downloads=true
     fi
 }
-
-
 # Allow user to disable provisioning if they started with a script they didn't want
 if [[ ! -f /.noprovisioning ]]; then
     provisioning_start
