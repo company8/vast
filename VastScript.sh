@@ -145,33 +145,44 @@ provisioning_update_comfyui() {
 
 function provisioning_get_nodes() {
     total=${#NODES[@]}
-    index=1
-    for repo in "${NODES[@]}"; do
+    start_time=$(date +%s)
+
+    for i in "${!NODES[@]}"; do
+        repo="${NODES[$i]}"
+        index=$((i + 1))
         dir="${repo##*/}"
         path="${COMFYUI_DIR}/custom_nodes/${dir}"
         requirements="${path}/requirements.txt"
-        
-        printf "[%2d/%2d] " "$index" "$total"
-        
+
+        # Color setup
+        RED='\033[0;31m'
+        GREEN='\033[0;32m'
+        YELLOW='\033[0;33m'
+        BLUE='\033[0;34m'
+        NC='\033[0m' # No Color
+
+        # Estimate ETA
+        now=$(date +%s)
+        elapsed=$((now - start_time))
+        if (( index > 1 )); then
+            avg_time=$((elapsed / (index - 1)))
+            remaining=$((avg_time * (total - index + 1)))
+            eta=$(date -ud "@$remaining" +%M:%S)
+        else
+            eta="--:--"
+        fi
+
+        printf "[ ${RED}%2d${NC}/${GREEN}%2d${NC} | ${YELLOW}ETA: %s${NC} ] Cloning node: ${BLUE}%s${NC}\n" "$index" "$total" "$eta" "$dir"
+
         if [[ -d $path ]]; then
             if [[ ${AUTO_UPDATE,,} != "false" ]]; then
-                echo "Updating node: $dir"
                 ( cd "$path" && git pull )
-                if [[ -e $requirements ]]; then
-                    pip install --no-cache-dir -r "$requirements"
-                fi
-            else
-                echo "Skipping update for node: $dir"
+                [[ -e $requirements ]] && pip install --no-cache-dir -r "$requirements"
             fi
         else
-            echo "Cloning node: $dir"
             git clone "$repo" "$path" --recursive
-            if [[ -e $requirements ]]; then
-                pip install --no-cache-dir -r "$requirements"
-            fi
+            [[ -e $requirements ]] && pip install --no-cache-dir -r "$requirements"
         fi
-        
-        ((index++))
     done
 }
 
