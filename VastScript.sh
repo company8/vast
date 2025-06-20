@@ -36,7 +36,6 @@ DEFAULT_WORKFLOWS=(
 )
 
 INPUT=(
-	"https://comfyanonymous.github.io/ComfyUI_examples/hidream/hidream_dev_example.png"
 )
 
 DIFFUSION_MODELS=(
@@ -175,17 +174,57 @@ function provisioning_get_nodes() {
     done
 }
 
+# Set to "true" for verbose output
+DEBUG_MODE=false
+DOWNLOAD_LOG="/tmp/provisioning_downloads.log"
+MAX_RETRIES=3
+
 function provisioning_get_files() {
     if [[ -z $2 ]]; then return 1; fi
-    
+
     dir="$1"
     mkdir -p "$dir"
     shift
     arr=("$@")
-    printf "Downloading %s model(s) to %s...\n" "${#arr[@]}" "$dir"
+    total=${#arr[@]}
+    start_time=$(date +%s)
+
+    echo "Downloading $total file(s) to $dir" | tee -a "$DOWNLOAD_LOG"
+
+    index=1
     for url in "${arr[@]}"; do
-        printf "Downloading: %s\n" "${url}"
-        provisioning_download "${url}" "${dir}" &
+        now=$(date +%s)
+        elapsed=$((now - start_time))
+        if (( index > 1 )); then
+            avg_time=$((elapsed / (index - 1)))
+            remaining=$((avg_time * (total - index + 1)))
+            eta=$(date -ud "@$remaining" +%M:%S)
+        else
+            eta="--:--"
+        fi
+
+        filename=$(basename "$url")
+        printf "[%2d/%2d | ETA: %s] Downloading: %s\n" "$index" "$total" "$eta" "$filename" | tee -a "$DOWNLOAD_LOG"
+
+        (
+            retries=0
+            success=false
+            until $success || ((retries >= MAX_RETRIES)); do
+                if provisioning_download "$url" "$dir" >>"$DOWNLOAD_LOG" 2>&1; then
+                    $DEBUG_MODE && echo "✅ Success: $filename"
+                    success=true
+                else
+                    ((retries++))
+                    echo "⚠️  Retry $retries/$MAX_RETRIES for: $filename" | tee -a "$DOWNLOAD_LOG"
+                    sleep 1
+                fi
+            done
+
+            if ! $success; then
+                echo "❌ Failed to download: $filename after $MAX_RETRIES attempts" | tee -a "$DOWNLOAD_LOG"
+            fi
+        ) &
+        ((index++))
     done
 }
 
