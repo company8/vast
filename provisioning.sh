@@ -29,7 +29,6 @@ NODES=(
 )
 
 WORKFLOWS=(
-    "https://github.com/ClownsharkBatwing/RES4LYF/blob/main/example_workflows/hidream%20txt2img.json"
 )
 
 INPUT=(
