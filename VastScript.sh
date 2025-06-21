@@ -108,8 +108,8 @@ function provisioning_start() {
 }
 
 function provisioning_print_header() {
-    echo "‎"
-    echo "‎"
+    echo "‎‎ ‎"
+    echo "‎‎ ‎"
     echo "╔════════════════════════════════════════════════════════╗"
     echo "║                                                        ║"
     echo "║                     ¯\_( ͡° ͜ʖ ͡°)_/¯                     ║"
@@ -118,8 +118,8 @@ function provisioning_print_header() {
     echo "║             This might take a few minutes.             ║"
     echo "║                                                        ║"
     echo "╚════════════════════════════════════════════════════════╝"
-    echo "‎"
-    echo "‎"
+    echo "‎‎ ‎"
+    echo "‎ ‎‎"
 }
 
 function provisioning_get_default_workflows() {
