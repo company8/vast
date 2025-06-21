@@ -117,10 +117,43 @@ function provisioning_get_default_workflows() {
     done
 }
 
+# Set to "true" for verbose output
+DEBUG_MODE=false
+APT_LOG="/tmp/apt_logs.log"
+MAX_RETRIES=1
+
 function provisioning_get_apt_packages() {
-    if [[ -n $APT_PACKAGES ]]; then
-            sudo $APT_INSTALL ${APT_PACKAGES[@]}
+    if [[ ${#APT_PACKAGES[@]} -eq 0 ]]; then
+        echo "No APT packages to install." | tee -a "$APT_LOG"
+        return 0
     fi
+
+    total=${#APT_PACKAGES[@]}
+    echo "Installing $total APT package(s)..." | tee -a "$APT_LOG"
+
+    index=1
+    for pkg in "${APT_PACKAGES[@]}"; do
+        printf "[%2d/%2d] Installing: %s\n" "$index" "$total" "$pkg" | tee -a "$APT_LOG"
+
+        retries=0
+        success=false
+        until $success || ((retries >= MAX_RETRIES)); do
+            if sudo apt-get install -y "$pkg" >>"$APT_LOG" 2>&1; then
+                echo "✅ Success: $pkg"
+                success=true
+            else
+                ((retries++))
+                echo "⚠️  Retry $retries/$MAX_RETRIES for: $pkg" | tee -a "$APT_LOG"
+                sleep 1
+            fi
+        done
+
+        if ! $success; then
+            echo "❌ Failed to install: $pkg after $MAX_RETRIES attempts" | tee -a "$APT_LOG"
+        fi
+
+        ((index++))
+    done
 }
 
 # Set to "true" for verbose output
