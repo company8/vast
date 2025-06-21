@@ -107,6 +107,21 @@ function provisioning_start() {
     provisioning_print_end
 }
 
+function provisioning_print_header() {
+    echo ""
+    echo ""
+    echo "╔════════════════════════════════════════════════════════╗"
+    echo "║                                                        ║"
+    echo "║                     ¯\_( ͡° ͜ʖ ͡°)_/¯                     ║"
+    echo "║                                                        ║"
+    echo "║            Setting up environment and tools            ║"
+    echo "║             This might take a few minutes.             ║"
+    echo "║                                                        ║"
+    echo "╚════════════════════════════════════════════════════════╝"
+    echo ""
+    echo ""
+}
+
 function provisioning_get_default_workflows() {
     echo "Injecting default workflow into ComfyUI frontend (via ComfyUI-Custom-Scripts)..."
     index=1
@@ -373,21 +388,17 @@ function provisioning_get_files() {
     done
 }
 
-function provisioning_print_header() {
-    echo ""
-    echo ""
-    echo "╔════════════════════════════════════════════════════════╗"
-    echo "║                                                        ║"
-    echo "║                     ¯\_( ͡° ͜ʖ ͡°)_/¯                     ║"
-    echo "║                                                        ║"
-    echo "║            Setting up environment and tools            ║"
-    echo "║             This might take a few minutes.             ║"
-    echo "║                                                        ║"
-    echo "╚════════════════════════════════════════════════════════╝"
-    echo ""
-    echo ""
-}
+# Inject Custom-Scripts config for default workflow location
+mkdir -p /workspace/ComfyUI/custom_nodes/ComfyUI-Custom-Scripts
 
+cat <<EOF > /workspace/ComfyUI/custom_nodes/ComfyUI-Custom-Scripts/pysssss.json
+{
+  "name": "CustomScripts",  
+  "workflows": {
+    "directory": "/workspace/ComfyUI/user/default/workflows"
+  }
+}
+EOF
 
 function provisioning_print_end() {
     printf "\n⚠️ Wait for models to finish downloading. This may take a while. For any errors, read the logs in the /tmp/ folder.\n\n"
