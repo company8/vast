@@ -390,7 +390,7 @@ function provisioning_print_header() {
 
 
 function provisioning_print_end() {
-    printf "\n⚠️ Wait for models to finish downloading. It may take awhile. For any errors, read the logs in the /tmp/ folder.\n\n"
+    printf "\n⚠️ Wait for models to finish downloading. This may take a while. For any errors, read the logs in the /tmp/ folder.\n\n"
 }
 
 function provisioning_has_valid_hf_token() {
