@@ -377,7 +377,7 @@ function provisioning_print_header() {
     echo ""
     echo "╔════════════════════════════════════════════════════════╗"
     echo "║                                                        ║"
-    echo "║                       ¯\_(ツ)_/¯                       ║"
+    echo "║                     ¯\_( ͡° ͜ʖ ͡°)_/¯                     ║"
     echo "║                                                        ║"
     echo "║            Setting up environment and tools            ║"
     echo "║             This might take a few minutes.             ║"
@@ -466,6 +466,6 @@ function provisioning_download() {
 # Allow user to disable provisioning if they started with a script they didn't want
 if [[ ! -f /.noprovisioning ]]; then
     provisioning_start
-    echo "✅ Provisioning complete. Removing /.provisioning to start ComfyUI."
+    echo "✅ Provisioning complete. Removing /.provisioning"
     rm -f /.provisioning
 fi
