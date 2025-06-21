@@ -389,11 +389,11 @@ function provisioning_get_files() {
 }
 
 # Inject Custom-Scripts config for default workflow location
-mkdir -p /workspace/ComfyUI/custom_nodes/ComfyUI-Custom-Scripts
 
-cat <<EOF > /workspace/ComfyUI/custom_nodes/ComfyUI-Custom-Scripts/pysssss.json
+cat <<EOF > /workspace/ComfyUI/custom_nodes/ComfyUI-Custom-Scripts/pysssss.default.json
 {
-  "name": "CustomScripts",  
+  "name": "CustomScripts",
+  "logging": false,
   "workflows": {
     "directory": "/workspace/ComfyUI/user/default/workflows"
   }
