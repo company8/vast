@@ -375,6 +375,7 @@ function provisioning_get_files() {
 
 function provisioning_print_header() {
     echo ""
+    echo ""
     echo "╔════════════════════════════════════════════════════════╗"
     echo "║                                                        ║"
     echo "║                     ¯\_( ͡° ͜ʖ ͡°)_/¯                     ║"
@@ -384,11 +385,12 @@ function provisioning_print_header() {
     echo "║                                                        ║"
     echo "╚════════════════════════════════════════════════════════╝"
     echo ""
+    echo ""
 }
 
 
 function provisioning_print_end() {
-    printf "\n⚠️ Wait for models to finish downloading. It may take awhile.\n\n"
+    printf "\n⚠️ Wait for models to finish downloading. It may take awhile. For any errors, read the logs in the /tmp/ folder.\n\n"
 }
 
 function provisioning_has_valid_hf_token() {
