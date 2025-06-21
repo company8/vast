@@ -413,18 +413,6 @@ function provisioning_get_files() {
     done
 }
 
-# Inject Custom-Scripts config for default workflow location
-
-#cat <<EOF > /workspace/ComfyUI/custom_nodes/ComfyUI-Custom-Scripts/pysssss.default.json
-# {
-  #"name": "CustomScripts",
-  #"logging": false,
-  #"workflows": {
-    #"directory": "/workspace/ComfyUI/user/default/workflows"
-  #}
-#}
-#EOF
-
 function provisioning_print_end() {
     printf "\n⚠️ Wait for models to finish downloading. This may take a while. For any errors, read the logs in the /tmp/ folder.\n\n"
 }
