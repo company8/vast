@@ -348,8 +348,18 @@ function provisioning_get_files() {
 }
 
 function provisioning_print_header() {
-    printf "\n##############################################\n#                                            #\n#          Provisioning container            #\n#                                            #\n#         This will take some time           #\n#                                            #\n# Your container will be ready on completion #\n#                                            #\n##############################################\n\n"
+    echo ""
+    echo "╔════════════════════════════════════════════════════════╗"
+    echo "║                                                        ║"
+    echo "║                       ¯\_(ツ)_/¯                       ║"
+    echo "║                                                        ║"
+    echo "║            Setting up environment and tools            ║"
+    echo "║             This might take a few minutes.             ║"
+    echo "║                                                        ║"
+    echo "╚════════════════════════════════════════════════════════╝"
+    echo ""
 }
+
 
 function provisioning_print_end() {
     printf "\n⚠️ Wait for models to finish downloading. It may take awhile.\n\n"
