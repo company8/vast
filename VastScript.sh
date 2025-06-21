@@ -157,7 +157,7 @@ function provisioning_get_pip_packages() {
             success=false
             until $success || ((retries >= MAX_RETRIES)); do
                 if pip install --no-cache-dir "$pkg" >>"$DOWNLOAD_LOG" 2>&1; then
-                    $DEBUG_MODE && echo "✅ Success: $pkg" | tee -a "$DOWNLOAD_LOG"
+                    echo "✅ Success: $pkg" | tee -a "$DOWNLOAD_LOG"
                     success=true
                 else
                     ((retries++))
@@ -182,14 +182,6 @@ MAX_RETRIES=1
 
 provisioning_update_comfyui() {
     required_tag="v0.3.34"
-    #Below may be unnecessary
-    echo "[1/1] ⏳ Checking ComfyUI version..." | tee -a "$DOWNLOAD_LOG"
-
-    if [[ ! -d $COMFYUI_DIR ]]; then
-        echo "❌ ComfyUI directory not found: $COMFYUI_DIR" | tee -a "$DOWNLOAD_LOG"
-        return 1
-    fi
-    #Till here, needs to be checked. If no need, delete.
     cd "$COMFYUI_DIR" || return 1
     git fetch --all --tags >>"$DOWNLOAD_LOG" 2>&1
 
