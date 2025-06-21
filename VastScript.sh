@@ -26,7 +26,7 @@ NODES=(
 	"https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite"
 	"https://github.com/ClownsharkBatwing/RES4LYF"
 	"https://github.com/rgthree/rgthree-comfy"
- 	"https://github.com/pythongosssss/ComfyUI-Custom-Scripts"
+ 	"https://github.com/company8/ComfyUI-Custom-Scripts"
 	# This repo is in maintenance
 	"https://github.com/cubiq/ComfyUI_essentials"
 )
@@ -110,6 +110,7 @@ function provisioning_start() {
 function provisioning_print_header() {
     echo ""
     echo ""
+    echo ""
     echo "╔════════════════════════════════════════════════════════╗"
     echo "║                                                        ║"
     echo "║                     ¯\_( ͡° ͜ʖ ͡°)_/¯                     ║"
@@ -118,6 +119,7 @@ function provisioning_print_header() {
     echo "║             This might take a few minutes.             ║"
     echo "║                                                        ║"
     echo "╚════════════════════════════════════════════════════════╝"
+    echo ""
     echo ""
     echo ""
 }
