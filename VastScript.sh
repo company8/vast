@@ -36,11 +36,17 @@ DEFAULT_WORKFLOWS=(
 	"https://raw.githubusercontent.com/ClownsharkBatwing/RES4LYF/refs/heads/main/example_workflows/hidream%20style%20transfer%20txt2img.json"
 )
 
-INPUT=(
+DATASET=(
 )
 
 DIFFUSION_MODELS=(
 	"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/diffusion_models/hidream_i1_dev_bf16.safetensors"
+)
+
+DIFFUSERS=(
+)
+
+LORA_MODELS=(
 )
 
 TEXT_ENCODERS=(
@@ -50,21 +56,28 @@ TEXT_ENCODERS=(
 	"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/t5xxl_fp8_e4m3fn_scaled.safetensors"
 )
 
-UNET_MODELS=(
+CLIP_VISION=(
 )
 
-LORA_MODELS=(
+CLIP_GGUF=(
 )
 
 VAE_MODELS=(
 	"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/vae/ae.safetensors"
 )
 
-ESRGAN_MODELS=(
+UPSCALE_MODELS=(
 )
 
 CONTROLNET_MODELS=(
 )
+
+UNET_MODELS=(
+)
+
+ESRGAN_MODELS=(
+)
+
 
 ### DO NOT EDIT BELOW HERE UNLESS YOU KNOW WHAT YOU ARE DOING ###
 
@@ -82,10 +95,13 @@ function provisioning_start() {
         "${DEFAULT_WORKFLOWS[@]}"
     provisioning_get_files \
         "${COMFYUI_DIR}/input" \
-        "${INPUT[@]}"
+        "${DATASET[@]}"
     provisioning_get_files \
         "${COMFYUI_DIR}/models/diffusion_models" \
         "${DIFFUSION_MODELS[@]}"
+    provisioning_get_files \
+        "${COMFYUI_DIR}/models/diffusers" \
+        "${DIFFUSERS[@]}"
     provisioning_get_files \
         "${COMFYUI_DIR}/models/unet" \
         "${UNET_MODELS[@]}"
@@ -99,8 +115,17 @@ function provisioning_start() {
         "${COMFYUI_DIR}/models/text_encoders" \
         "${TEXT_ENCODERS[@]}"
     provisioning_get_files \
+        "${COMFYUI_DIR}/models/clip_vision" \
+        "${CLIP_VISION[@]}"
+    provisioning_get_files \
+        "${COMFYUI_DIR}/models/clip_gguf" \
+        "${CLIP_GGUF[@]}"
+    provisioning_get_files \
         "${COMFYUI_DIR}/models/vae" \
         "${VAE_MODELS[@]}"
+    provisioning_get_files \
+        "${COMFYUI_DIR}/models/upscale_models" \
+        "${UPSCALE_MODELS[@]}"
     provisioning_get_files \
         "${COMFYUI_DIR}/models/esrgan" \
         "${ESRGAN_MODELS[@]}"
