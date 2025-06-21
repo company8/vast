@@ -110,7 +110,8 @@ function provisioning_get_default_workflows() {
     for wf in "${DEFAULT_WORKFLOWS[@]}"; do
         workflow_json=$(curl -s "$wf")
         if [[ -n $workflow_json ]]; then
-            echo "export const defaultGraph = $workflow_json;" > /opt/ComfyUI/web/scripts/defaultGraph.js
+            escaped_json=$(echo "$workflow_json" | python3 -c "import sys, json; print(json.dumps(sys.stdin.read()))")
+            echo "export const defaultGraph = JSON.parse($escaped_json);" > /opt/ComfyUI/web/scripts/defaultGraph.js
             break
         fi
     done
@@ -181,13 +182,14 @@ MAX_RETRIES=1
 
 provisioning_update_comfyui() {
     required_tag="v0.3.34"
+    #Below may be unnecessary
     echo "[1/1] ⏳ Checking ComfyUI version..." | tee -a "$DOWNLOAD_LOG"
 
     if [[ ! -d $COMFYUI_DIR ]]; then
         echo "❌ ComfyUI directory not found: $COMFYUI_DIR" | tee -a "$DOWNLOAD_LOG"
         return 1
     fi
-
+    #Till here, needs to be checked. If no need, delete.
     cd "$COMFYUI_DIR" || return 1
     git fetch --all --tags >>"$DOWNLOAD_LOG" 2>&1
 
