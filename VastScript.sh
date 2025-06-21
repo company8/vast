@@ -107,15 +107,39 @@ function provisioning_start() {
 }
 
 function provisioning_get_default_workflows() {
+    echo "Injecting default workflow into ComfyUI frontend..."
+    index=1
+    total=${#DEFAULT_WORKFLOWS[@]}
+    start_time=$(date +%s)
+
     for wf in "${DEFAULT_WORKFLOWS[@]}"; do
+        now=$(date +%s)
+        elapsed=$((now - start_time))
+        eta="--:--"
+        if (( index > 1 )); then
+            avg=$((elapsed / (index - 1)))
+            remaining=$((avg * (total - index + 1)))
+            eta=$(date -ud "@$remaining" +%M:%S)
+        fi
+
+        printf "[%2d/%2d | ETA: %s] Fetching: %s\n" "$index" "$total" "$eta" "$(basename "$wf")"
+
         workflow_json=$(curl -s "$wf")
         if [[ -n $workflow_json ]]; then
             escaped_json=$(echo "$workflow_json" | python3 -c "import sys, json; print(json.dumps(sys.stdin.read()))")
-            echo "export const defaultGraph = JSON.parse($escaped_json);" > "/venv/main/lib/python3.12/site-packages/comfyui_frontend_package/static/scripts/defaultGraph.js"
-            echo "✅ Default workflow injected into frontend package"
-            break
+            echo "export const defaultGraph = JSON.parse($escaped_json);" > \
+                "/venv/main/lib/python3.12/site-packages/comfyui_frontend_package/static/scripts/defaultGraph.js"
+            echo "✅ Default workflow injected successfully"
+            return 0
+        else
+            echo "⚠️ Failed to fetch or empty response from: $wf"
         fi
+
+        ((index++))
     done
+
+    echo "❌ No valid workflow JSON found. Skipping injection."
+    return 1
 }
 
 # Set to "true" for verbose output
@@ -144,7 +168,7 @@ function provisioning_get_apt_packages() {
                 success=true
             else
                 ((retries++))
-                echo "⚠️  Retry $retries/$MAX_RETRIES for: $pkg" | tee -a "$APT_LOG"
+                echo "⚠️ Retry $retries/$MAX_RETRIES for: $pkg" | tee -a "$APT_LOG"
                 sleep 1
             fi
         done
@@ -195,7 +219,7 @@ function provisioning_get_pip_packages() {
                     success=true
                 else
                     ((retries++))
-                    echo "⚠️  Retry $retries/$MAX_RETRIES for: $pkg" | tee -a "$DOWNLOAD_LOG"
+                    echo "⚠️ Retry $retries/$MAX_RETRIES for: $pkg" | tee -a "$DOWNLOAD_LOG"
                 fi
             done
 
@@ -281,7 +305,7 @@ function provisioning_get_nodes() {
                     success=true
                 else
                     ((retries++))
-                    echo "⚠️  Retry $retries/$MAX_RETRIES for: $dir" | tee -a "$DOWNLOAD_LOG"
+                    echo "⚠️ Retry $retries/$MAX_RETRIES for: $dir" | tee -a "$DOWNLOAD_LOG"
                 fi
             done
 
