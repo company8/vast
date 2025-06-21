@@ -253,7 +253,7 @@ function provisioning_print_header() {
 }
 
 function provisioning_print_end() {
-    printf "\n✅ Success: ComfyUi will start in a moment.\n\n"
+    printf "\n⚠️ Wait for models to finish downloading. It may take awhile.\n\n"
 }
 
 function provisioning_has_valid_hf_token() {
@@ -331,4 +331,6 @@ function provisioning_download() {
 # Allow user to disable provisioning if they started with a script they didn't want
 if [[ ! -f /.noprovisioning ]]; then
     provisioning_start
+    echo "✅ Provisioning complete. Removing /.provisioning to start ComfyUI."
+    rm -f /.provisioning
 fi
