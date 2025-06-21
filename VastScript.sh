@@ -111,11 +111,13 @@ function provisioning_get_default_workflows() {
         workflow_json=$(curl -s "$wf")
         if [[ -n $workflow_json ]]; then
             escaped_json=$(echo "$workflow_json" | python3 -c "import sys, json; print(json.dumps(sys.stdin.read()))")
-            echo "export const defaultGraph = JSON.parse($escaped_json);" > /opt/ComfyUI/web/scripts/defaultGraph.js
+            echo "export const defaultGraph = JSON.parse($escaped_json);" > "/venv/main/lib/python3.12/site-packages/comfyui_frontend_package/static/scripts/defaultGraph.js"
+            echo "✅ Default workflow injected into frontend package"
             break
         fi
     done
 }
+
 
 # Set to "true" for verbose output
 DEBUG_MODE=false
