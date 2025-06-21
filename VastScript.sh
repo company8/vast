@@ -122,23 +122,94 @@ function provisioning_get_apt_packages() {
     fi
 }
 
+# Set to "true" for verbose output
+DEBUG_MODE=false
+DOWNLOAD_LOG="/tmp/pip_packages.log"
+MAX_RETRIES=1
+
 function provisioning_get_pip_packages() {
-    if [[ -n $PIP_PACKAGES ]]; then
-            pip install --no-cache-dir ${PIP_PACKAGES[@]}
+    if [[ -z ${PIP_PACKAGES[*]} ]]; then
+        echo "No PIP packages to install." | tee -a "$DOWNLOAD_LOG"
+        return 0
     fi
+
+    total=${#PIP_PACKAGES[@]}
+    start_time=$(date +%s)
+    echo "Installing $total PIP package(s)" | tee -a "$DOWNLOAD_LOG"
+
+    index=1
+    for pkg in "${PIP_PACKAGES[@]}"; do
+        now=$(date +%s)
+        elapsed=$((now - start_time))
+        if (( index > 1 )); then
+            avg_time=$((elapsed / (index - 1)))
+            remaining=$((avg_time * (total - index + 1)))
+            eta=$(date -ud "@$remaining" +%M:%S)
+        else
+            eta="--:--"
+        fi
+
+        printf "[%2d/%2d | ETA: %s] Installing: %s\n" "$index" "$total" "$eta" "$pkg" | tee -a "$DOWNLOAD_LOG"
+
+        (
+            retries=0
+            success=false
+            until $success || ((retries >= MAX_RETRIES)); do
+                if pip install --no-cache-dir "$pkg" >>"$DOWNLOAD_LOG" 2>&1; then
+                    $DEBUG_MODE && echo "✅ Success: $pkg" | tee -a "$DOWNLOAD_LOG"
+                    success=true
+                else
+                    ((retries++))
+                    echo "⚠️  Retry $retries/$MAX_RETRIES for: $pkg" | tee -a "$DOWNLOAD_LOG"
+                fi
+            done
+
+            if ! $success; then
+                echo "❌ Failed to install: $pkg after $MAX_RETRIES attempts" | tee -a "$DOWNLOAD_LOG"
+            fi
+        ) &
+        ((index++))
+    done
+    echo "✅ All pip packages installed (or attempted)." | tee -a "$DOWNLOAD_LOG"
 }
 
 # We must be at release tag v0.3.34 or greater for fp8 support
+# Set to "true" for verbose output
+DEBUG_MODE=false
+DOWNLOAD_LOG="/tmp/comfyui_update.log"
+MAX_RETRIES=1
 
 provisioning_update_comfyui() {
     required_tag="v0.3.34"
-    cd ${COMFYUI_DIR}
-    git fetch --all --tags
+    echo "[1/1] ⏳ Checking ComfyUI version..." | tee -a "$DOWNLOAD_LOG"
+
+    if [[ ! -d $COMFYUI_DIR ]]; then
+        echo "❌ ComfyUI directory not found: $COMFYUI_DIR" | tee -a "$DOWNLOAD_LOG"
+        return 1
+    fi
+
+    cd "$COMFYUI_DIR" || return 1
+    git fetch --all --tags >>"$DOWNLOAD_LOG" 2>&1
+
     current_commit=$(git rev-parse HEAD)
     required_commit=$(git rev-parse "$required_tag")
+
     if git merge-base --is-ancestor "$current_commit" "$required_commit"; then
-        git checkout "$required_tag"
-        pip install --no-cache-dir -r requirements.txt
+        echo "[Updating] Checking out $required_tag..." | tee -a "$DOWNLOAD_LOG"
+        if git checkout "$required_tag" >>"$DOWNLOAD_LOG" 2>&1; then
+            echo "[Installing] Dependencies..." | tee -a "$DOWNLOAD_LOG"
+            if pip install --no-cache-dir -r requirements.txt >>"$DOWNLOAD_LOG" 2>&1; then
+                echo "✅ Success: ComfyUI updated to tag $required_tag" | tee -a "$DOWNLOAD_LOG"
+            else
+                echo "❌ pip install failed for requirements.txt" | tee -a "$DOWNLOAD_LOG"
+                return 1
+            fi
+        else
+            echo "❌ git checkout failed for tag $required_tag" | tee -a "$DOWNLOAD_LOG"
+            return 1
+        fi
+    else
+        echo "⏩ Skipping update: Already at or beyond $required_tag" | tee -a "$DOWNLOAD_LOG"
     fi
 }
 
