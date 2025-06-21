@@ -118,7 +118,6 @@ function provisioning_get_default_workflows() {
     done
 }
 
-
 # Set to "true" for verbose output
 DEBUG_MODE=false
 APT_LOG="/tmp/apt_logs.log"
