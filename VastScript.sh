@@ -26,6 +26,7 @@ NODES=(
 	"https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite"
 	"https://github.com/ClownsharkBatwing/RES4LYF"
 	"https://github.com/rgthree/rgthree-comfy"
+ 	"https://github.com/pythongosssss/ComfyUI-Custom-Scripts"
 	# This repo is in maintenance
 	"https://github.com/cubiq/ComfyUI_essentials"
 )
@@ -107,7 +108,7 @@ function provisioning_start() {
 }
 
 function provisioning_get_default_workflows() {
-    echo "Injecting default workflow into ComfyUI frontend..."
+    echo "Injecting default workflow into ComfyUI frontend (via ComfyUI-Custom-Scripts)..."
     index=1
     total=${#DEFAULT_WORKFLOWS[@]}
     start_time=$(date +%s)
@@ -122,17 +123,18 @@ function provisioning_get_default_workflows() {
             eta=$(date -ud "@$remaining" +%M:%S)
         fi
 
-        printf "[%2d/%2d | ETA: %s] Fetching: %s\n" "$index" "$total" "$eta" "$(basename "$wf")"
+        filename=$(basename "$wf")
+        printf "[%2d/%2d | ETA: %s] Fetching: %s\n" "$index" "$total" "$eta" "$filename"
 
         workflow_json=$(curl -s "$wf")
         if [[ -n $workflow_json ]]; then
             escaped_json=$(echo "$workflow_json" | python3 -c "import sys, json; print(json.dumps(sys.stdin.read()))")
             echo "export const defaultGraph = JSON.parse($escaped_json);" > \
-                "/venv/main/lib/python3.12/site-packages/comfyui_frontend_package/static/scripts/defaultGraph.js"
-            echo "✅ Default workflow injected successfully"
+                "/workspace/ComfyUI/custom_nodes/ComfyUI-Custom-Scripts/defaultGraph.js"
+            echo "✅ Workflow injected successfully into ComfyUI-Custom-Scripts"
             return 0
         else
-            echo "⚠️ Failed to fetch or empty response from: $wf"
+            echo "⚠️  Failed to fetch or empty response from: $wf"
         fi
 
         ((index++))
