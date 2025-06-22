@@ -470,7 +470,7 @@ function provisioning_download() {
         # Fallback if filename is empty
         [[ -z "$filename" ]] && filename=$(basename "$final_url")
 
-        aria2c -x 16 -j 4 -k 10M --max-tries=0 -c --file-allocation=falloc \
+        aria2c -x 16 -j 4 -s 8 -x 8 -k 10M --max-tries=0 -c --file-allocation=falloc \
             --header="Authorization: Bearer $auth_token" \
             --dir="$2" -o "$filename" "$final_url" \
             --optimize-concurrent-downloads=true
@@ -479,7 +479,7 @@ function provisioning_download() {
         final_url=$(curl -H "Authorization: Bearer $auth_token" -s -L -I -w '%{url_effective}' -o /dev/null "$1")
         filename=$(basename "$final_url")
 
-        aria2c -x 16 -j 8 -k 10M --max-tries=0 -c --file-allocation=falloc \
+        aria2c -x 16 -j 8 -s 8 -x 8 -k 10M --max-tries=0 -c --file-allocation=falloc \
             --header="Authorization: Bearer $auth_token" \
             --dir="$2" -o "$filename" "$final_url" \
             --optimize-concurrent-downloads=true
@@ -487,7 +487,7 @@ function provisioning_download() {
     else
         # Fallback for public URLs
         filename=$(basename "$1")
-        aria2c -x 16 -j 8 -k 10M --max-tries=0 -c --file-allocation=falloc \
+        aria2c -x 16 -j 8 -s 8 -x 8 -k 10M --max-tries=0 -c --file-allocation=falloc \
             --dir="$2" -o "$filename" "$1" \
             --optimize-concurrent-downloads=true
     fi
