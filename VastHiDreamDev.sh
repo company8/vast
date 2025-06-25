@@ -54,7 +54,7 @@ TEXT_ENCODERS=(
 	"https://huggingface.co/easygoing0114/HiDream_HQ-models/resolve/main/CLIP-ViT-bigG-14-laion2B-39B-b160k-FP32.safetensors" #Clip G FP32 LAION
   	"https://huggingface.co/zer0int/LongCLIP-SAE-ViT-L-14/resolve/main/model.safetensors" #Clip L FP32 ZeroIntSmooth
    	"https://huggingface.co/easygoing0114/flan-t5-xxl-fused/resolve/main/flan_t5_xxl_TE-only_FP32.safetensors" #Flan T5 XXL FP32
-    	"https://huggingface.co/compan/flan-t5-xl/resolve/main/flan-t5-xl-fp32.safetensors" #Flan T5 XL FP32
+    	"https://huggingface.co/compan/flan-t5-xl/resolve/main/flan-t5-xl-TE-only-fp32.safetensors" #Flan T5 XL FP32
     	"https://huggingface.co/easygoing0114/HiDream_HQ-models/resolve/main/Llama-3.1-8b-instruct-BF16.safetensors" #LLama 3.1 8B Instruct BF16
 	#"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/clip_l_hidream.safetensors" #Official clip L
 	#"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/llama_3.1_8b_instruct_fp8_scaled.safetensors"
