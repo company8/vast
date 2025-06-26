@@ -470,7 +470,7 @@ function provisioning_download() {
         # Fallback if filename is empty
         [[ -z "$filename" ]] && filename=$(basename "$final_url")
 
-        aria2c -x 16 -j 4 -s 8 -x 8 -k 10M --max-tries=0 -c --file-allocation=falloc \
+        aria2c -x 16 -j 8 -s 8 -x 8 -k 10M --max-tries=0 -c --file-allocation=falloc \
             --header="Authorization: Bearer $auth_token" \
             --dir="$2" -o "$filename" "$final_url" \
             --optimize-concurrent-downloads=true
