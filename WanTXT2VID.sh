@@ -279,7 +279,7 @@ DOWNLOAD_LOG="/tmp/sage_attention.log"
 MAX_RETRIES=1
 
 function provisioning_install_sageattention_v2() {
-    echo "\n🔧 Installing SageAttention v2 from source..."
+    echo "🔧 Installing SageAttention v2 from source..."
 
     local SA_REPO="https://github.com/thu-ml/SageAttention"
     local SA_DIR="/workspace/SageAttention"
