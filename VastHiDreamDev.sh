@@ -49,10 +49,10 @@ LORA_MODELS=(
 
 TEXT_ENCODERS=(
  	"https://huggingface.co/compan/clip-models/resolve/main/hiDR34MZ_dirtyGCLIP_bf16.safetensors" #NSFW HiDR34MZ dirty clip g
-     	"https://huggingface.co/compan/clip-models/resolve/main/simulacrumCLIPGFP32.safetensors" #Clip G FP32 Simulacrum
-	"https://huggingface.co/compan/clip-models/resolve/main/CLIP-ViT-bigG-14-laion2B-39B-b160k-FP32.safetensors" #Clip G FP32 LAION
-  	"https://huggingface.co/compan/clip-models/resolve/main/LongCLIP-SAE-ViT-L-14-FP32.safetensors" #Clip L FP32 ZeroIntSmooth
-   	"https://huggingface.co/compan/flan-t5-xxl-te/resolve/main/flan-t5-xxl-TE-FP32.safetensors" #Flan T5 XXL FP32
+     	"https://huggingface.co/compan/clip-models/resolve/main/simulacrumCLIP-G-BF16.safetensors" #Clip G FP32 Simulacrum
+	"https://huggingface.co/compan/clip-models/resolve/main/CLIP-ViT-bigG-14-laion2B-39B-b160k-BF16.safetensors" #Clip G FP32 LAION
+  	"https://huggingface.co/compan/clip-models/resolve/main/LongCLIP-SAE-ViT-L-14-BF16.safetensors" #Clip L FP32 ZeroIntSmooth
+   	"https://huggingface.co/compan/flan-t5-xxl-te/resolve/main/flan-t5-xxl-TE-BF16.safetensors" #Flan T5 XXL FP32
      	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/llama-3.1-8b-lexi-uncensored-v2-instruct-bf16.safetensors" #LLama 3.1 Lexi v2 Uncensored BF16
 	#"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/clip_g_hidream.safetensors" #Official clip G
 	#"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/clip_l_hidream.safetensors" #Official clip L
