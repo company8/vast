@@ -61,7 +61,7 @@ CLIP_GGUF=(
 )
 
 VAE_MODELS=(
-	"https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors"
+	"https://huggingface.co/compan/Wan2.1/resolve/main/Wan2.1-VAE-FP32.safetensors"
 )
 
 UPSCALE_MODELS=(
