@@ -51,6 +51,7 @@ LORA_MODELS=(
 
 TEXT_ENCODERS=(
 	"https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp16.safetensors"
+ 	"https://huggingface.co/compan/flan-t5-xxl-te/resolve/main/flan-t5-xxl-TE-BF16.safetensors"
 )
 
 CLIP_VISION=(
