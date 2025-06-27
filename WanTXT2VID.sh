@@ -54,7 +54,6 @@ TEXT_ENCODERS=(
 
 CLIP_VISION=(
 	"https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors"
- 	"https://huggingface.co/compan/flan-t5-xxl-te/resolve/main/flan-t5-xxl-TE-BF16.safetensors"
 )
 
 CLIP_GGUF=(
