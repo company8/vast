@@ -33,6 +33,7 @@ DEFAULT_WORKFLOWS=(
 	"https://raw.githubusercontent.com/company8/vast/refs/heads/main/hidreamtxt2img.json"
 	"https://raw.githubusercontent.com/ClownsharkBatwing/RES4LYF/refs/heads/main/example_workflows/hidream%20style%20transfer%20txt2img.json"
 )
+
 #DATASET aka the input folder in ComfyUI
 DATASET=(
 )
