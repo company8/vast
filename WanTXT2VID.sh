@@ -86,6 +86,7 @@ function provisioning_start() {
     provisioning_update_comfyui
     provisioning_get_nodes
     provisioning_get_pip_packages
+    provisioning_install_sageattention_v2
     workflows_dir="${COMFYUI_DIR}/user/default/workflows"
     mkdir -p "${workflows_dir}"
     provisioning_get_files \
@@ -270,6 +271,34 @@ function provisioning_get_pip_packages() {
         ((index++))
     done
     echo "✅ All pip packages installed (or attempted)." | tee -a "$DOWNLOAD_LOG"
+}
+
+# Set to "true" for verbose output
+DEBUG_MODE=false
+DOWNLOAD_LOG="/tmp/sage_attention.log"
+MAX_RETRIES=1
+
+function provisioning_install_sageattention_v2() {
+    echo "\n🔧 Installing SageAttention v2 from source..."
+
+    local SA_REPO="https://github.com/thu-ml/SageAttention"
+    local SA_DIR="/workspace/SageAttention"
+
+    if [[ -d "$SA_DIR" ]]; then
+        echo "✅ SageAttention repo already cloned, pulling latest changes..."
+        (cd "$SA_DIR" && git pull)
+    else
+        echo "📥 Cloning SageAttention v2 repo..."
+        git clone "$SA_REPO" "$SA_DIR"
+    fi
+
+    echo "📦 Installing SageAttention v2 via pip in editable mode..."
+    pip install -e "$SA_DIR" || {
+        echo "❌ Failed to install SageAttention v2"
+        return 1
+    }
+
+    echo "✅ SageAttention v2 installed successfully"
 }
 
 # We must be at release tag v0.3.34 or greater for fp8 support
