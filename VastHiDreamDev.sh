@@ -276,7 +276,7 @@ function provisioning_get_pip_packages() {
         ) &
         ((index++))
     done
-    echo "✅ All pip packages installed (or attempted)." | tee -a "$DOWNLOAD_LOG"
+    echo "✅ All pip packages installed" | tee -a "$DOWNLOAD_LOG"
 }
 
 # We must be at release tag v0.3.34 or greater for fp8 support
