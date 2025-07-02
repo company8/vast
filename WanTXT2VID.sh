@@ -46,6 +46,7 @@ DIFFUSERS=(
 
 LORA_MODELS=(
 	"https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors"
+ 	"https://huggingface.co/vrgamedevgirl84/Wan14BT2VFusioniX/resolve/main/FusionX_LoRa/Wan2.1_T2V_14B_FusionX_LoRA.safetensors"
 )
 
 TEXT_ENCODERS=(
