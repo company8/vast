@@ -50,12 +50,12 @@ LORA_MODELS=(
 )
 
 TEXT_ENCODERS=(
-	"https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp16.safetensors"
+	#"https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp16.safetensors"
  	"https://huggingface.co/compan/clip-models/resolve/main/umt5-xxl-encoder-with-tokenizer-FP32.safetensors"
 )
 
 CLIP_VISION=(
-	"https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors"
+	#"https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors"
  	"https://huggingface.co/compan/clip-models/resolve/main/CLIP-ViT-H-14-laion2B-s32B-b79K-VISION-ONLY-FP32.safetensors"
 )
 
