@@ -50,9 +50,9 @@ LORA_MODELS=(
 
 TEXT_ENCODERS=(
  	"https://huggingface.co/compan/clip-models/resolve/main/hiDR34MZ_dirtyGCLIP_bf16.safetensors" #NSFW HiDR34MZ dirty clip g
-     	"https://huggingface.co/compan/clip-models/resolve/main/simulacrumCLIP-G-BF16.safetensors" #Clip G Simulacrum
+     	#"https://huggingface.co/compan/clip-models/resolve/main/simulacrumCLIP-G-BF16.safetensors" #Clip G Simulacrum
 	"https://huggingface.co/compan/clip-models/resolve/main/CLIP-ViT-bigG-14-laion2B-39B-b160k-BF16.safetensors" #Clip G LAION
-  	"https://huggingface.co/compan/clip-models/resolve/main/LongCLIP-SAE-ViT-L-14-BF16.safetensors" #LongClip L Zer0Int
+  	#"https://huggingface.co/compan/clip-models/resolve/main/LongCLIP-SAE-ViT-L-14-BF16.safetensors" #LongClip L Zer0Int
    	"https://huggingface.co/compan/clip-models/resolve/main/LongCLIP-GmP-ViT-L-14-BF16.safetensors" #LongClip L Zer0Int 
     	"https://huggingface.co/compan/clip-models/resolve/main/CLIP-GmP-ViT-L-14-BF16.safetensors" #Clip L Zer0Int
    	"https://huggingface.co/compan/flan-t5-xxl-te/resolve/main/flan-t5-xxl-TE-BF16.safetensors" #Flan T5 XXL
