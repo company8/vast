@@ -27,6 +27,7 @@ NODES=(
 	"https://github.com/ClownsharkBatwing/RES4LYF"
 	"https://github.com/rgthree/rgthree-comfy"
  	"https://github.com/company8/ComfyUI-Custom-Scripts"
+  	"https://github.com/company8/ComfyUI_Searge_LLM"
 	# This repo is in maintenance
 	"https://github.com/cubiq/ComfyUI_essentials"
 )
