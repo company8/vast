@@ -70,7 +70,7 @@ TEXT_ENCODERS=(
 LLM_MODEL_FILES=(
 	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/config.json"
 	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/generation_config.json"
-	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/llama-3.1-8b-lexi-uncensored-v2-instruct-bf16.safetensors" # <-- This is YOUR SINGLE MODEL FILE
+	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/llama-3.1-8b-lexi-uncensored-v2-instruct-bf16.safetensors"
 	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/tokenizer.json"
 	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/tokenizer_config.json"
 	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/special_tokens_map.json"
@@ -109,7 +109,6 @@ function provisioning_start() {
     provisioning_get_nodes
     provisioning_get_pip_packages
     LLM_SAFES_TARGET_DIR="${COMFYUI_DIR}/models/text_encoders/llm_safetensors/${LLM_MODEL_NAME}"
-    echo "🔧 Setting up LLM safetensors model: ${LLM_MODEL_NAME}"
     workflows_dir="${COMFYUI_DIR}/user/default/workflows"
     mkdir -p "${LLM_SAFES_TARGET_DIR}"
     mkdir -p "${workflows_dir}"
