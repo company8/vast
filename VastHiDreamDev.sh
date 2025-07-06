@@ -60,7 +60,7 @@ TEXT_ENCODERS=(
    	#"https://huggingface.co/compan/flan-t5-xxl-te/resolve/main/flan-t5-xxl-TE-BF16.safetensors" #Flan T5 XXL
     	#"https://huggingface.co/Kaoru8/T5XXL-Unchained/resolve/main/t5xxl-unchained-f16.safetensors" #T5 Unchained XXL
 	"https://huggingface.co/compan/clip-models/resolve/main/CLIP-Flan-T5-TE-with-tokenizer-BF16.safetensors" #CLIP Flan T5 XXL TE-only
-     	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/llama-3.1-8b-lexi-uncensored-v2-instruct-bf16.safetensors" #LLama 3.1 Lexi v2 Uncensored
+     	#"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/llama-3.1-8b-lexi-uncensored-v2-instruct-bf16.safetensors" #LLama 3.1 Lexi v2 Uncensored
 	#"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/clip_g_hidream.safetensors" #Official clip G
 	#"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/clip_l_hidream.safetensors" #Official clip L
 	#"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/llama_3.1_8b_instruct_fp8_scaled.safetensors" #Official Llama 3.1 8B
