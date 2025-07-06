@@ -6,6 +6,8 @@ APT_INSTALL="apt-get install -y"
 
 COMFYUI_DIR=${WORKSPACE}/ComfyUI
 
+LLM_MODEL_NAME="Llama-3.1-8B-Lexi-Uncensored-V2-Instruct"
+
 # Packages are installed after nodes so we can fix them...
 
 APT_PACKAGES=(
@@ -65,6 +67,15 @@ TEXT_ENCODERS=(
 	#"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/t5xxl_fp8_e4m3fn_scaled.safetensors" #Official T5 XXL
 )
 
+LLM_MODEL_FILES=(
+	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/config.json"
+	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/generation_config.json"
+	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/llama-3.1-8b-lexi-uncensored-v2-instruct-bf16.safetensors" # <-- This is YOUR SINGLE MODEL FILE
+	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/tokenizer.json"
+	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/tokenizer_config.json"
+	"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/special_tokens_map.json"
+)
+
 CLIP_VISION=(
 )
 
@@ -97,11 +108,17 @@ function provisioning_start() {
     provisioning_update_comfyui
     provisioning_get_nodes
     provisioning_get_pip_packages
+    LLM_SAFES_TARGET_DIR="${COMFYUI_DIR}/models/text_encoders/llm_safetensors/${LLM_MODEL_NAME}"
+    echo "🔧 Setting up LLM safetensors model: ${LLM_MODEL_NAME}"
     workflows_dir="${COMFYUI_DIR}/user/default/workflows"
+    mkdir -p "${LLM_SAFES_TARGET_DIR}"
     mkdir -p "${workflows_dir}"
     provisioning_get_files \
         "${workflows_dir}" \
         "${DEFAULT_WORKFLOWS[@]}"
+    provisioning_get_files \
+        "${LLM_SAFES_TARGET_DIR}" \
+        "${LLM_MODEL_FILES[@]}"
     provisioning_get_files \
         "${COMFYUI_DIR}/input" \
         "${DATASET[@]}"
