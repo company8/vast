@@ -109,7 +109,7 @@ function provisioning_start() {
     provisioning_update_comfyui
     provisioning_get_nodes
     provisioning_get_pip_packages
-    LLM_SAFES_TARGET_DIR="${COMFYUI_DIR}/models/text_encoders/llm_safetensors/${LLM_MODEL_NAME}"
+    LLM_LOCATION="${COMFYUI_DIR}/models/text_encoders/LLMs/${LLM_MODEL_NAME}"
     workflows_dir="${COMFYUI_DIR}/user/default/workflows"
     mkdir -p "${LLM_SAFES_TARGET_DIR}"
     mkdir -p "${workflows_dir}"
@@ -117,7 +117,7 @@ function provisioning_start() {
         "${workflows_dir}" \
         "${DEFAULT_WORKFLOWS[@]}"
     provisioning_get_files \
-        "${LLM_SAFES_TARGET_DIR}" \
+        "${LLM_LOCATION}" \
         "${LLM_MODEL_FILES[@]}"
     provisioning_get_files \
         "${COMFYUI_DIR}/input" \
