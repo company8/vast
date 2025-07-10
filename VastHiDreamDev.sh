@@ -250,7 +250,7 @@ function provisioning_get_apt_packages() {
 }
 
 # Set to "true" for verbose output
-DEBUG_MODE=false
+DEBUG_MODE=true
 DOWNLOAD_LOG="/tmp/pip_packages.log"
 MAX_RETRIES=1
 
