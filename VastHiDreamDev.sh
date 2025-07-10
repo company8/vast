@@ -282,7 +282,7 @@ function provisioning_get_pip_packages() {
             retries=0
             success=false
             until $success || ((retries >= MAX_RETRIES)); do
-                if pip install --no-cache-dir "$pkg" >>"$DOWNLOAD_LOG" 2>&1; then
+                if pip install --no-cache-dir --verbose "$pkg" 2>&1 | tee -a "$DOWNLOAD_LOG"; then
                     echo "✅ Success: $pkg" | tee -a "$DOWNLOAD_LOG"
                     success=true
                 else
