@@ -250,7 +250,7 @@ function provisioning_get_apt_packages() {
 }
 
 # Set to "true" for verbose output
-DEBUG_MODE=true
+DEBUG_MODE=false
 DOWNLOAD_LOG="/tmp/pip_packages.log"
 MAX_RETRIES=1
 
@@ -334,7 +334,7 @@ provisioning_update_comfyui() {
 }
 
 # Set to "true" for verbose output
-DEBUG_MODE=false
+DEBUG_MODE=true
 DOWNLOAD_LOG="/tmp/nodes_logs.log"
 MAX_RETRIES=1
 
@@ -354,7 +354,7 @@ function provisioning_get_nodes() {
                 echo "Updating node: $dir" | tee -a "$DOWNLOAD_LOG"
                 ( cd "$path" && git pull >>"$DOWNLOAD_LOG" 2>&1 )
                 if [[ -e $requirements ]]; then
-                    pip install --no-cache-dir -r "$requirements" >>"$DOWNLOAD_LOG" 2>&1
+                    pip install --no-cache-dir -r "$requirements" 2>&1 | tee -a "$DOWNLOAD_LOG"
                 fi
                 echo "✅ Success: $dir" | tee -a "$DOWNLOAD_LOG"
             else
@@ -367,7 +367,7 @@ function provisioning_get_nodes() {
             until $success || ((retries >= MAX_RETRIES)); do
                 if git clone "$repo" "$path" --recursive >>"$DOWNLOAD_LOG" 2>&1; then
                     if [[ -e $requirements ]]; then
-                        pip install --no-cache-dir -r "$requirements" >>"$DOWNLOAD_LOG" 2>&1
+                        pip install --no-cache-dir -r "$requirements" 2>&1 | tee -a "$DOWNLOAD_LOG"
                     fi
                     echo "✅ Success: $dir" | tee -a "$DOWNLOAD_LOG"
                     success=true
