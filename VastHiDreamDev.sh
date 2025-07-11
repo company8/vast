@@ -42,7 +42,7 @@ DATASET=(
 )
 
 DIFFUSION_MODELS=(
-	"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/diffusion_models/hidream_i1_dev_bf16.safetensors"
+	#"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/diffusion_models/hidream_i1_dev_bf16.safetensors"
 )
 
 DIFFUSERS=(
@@ -60,7 +60,7 @@ TEXT_ENCODERS=(
     	#"https://huggingface.co/compan/clip-models/resolve/main/CLIP-GmP-ViT-L-14-BF16.safetensors" #Clip L Zer0Int
    	#"https://huggingface.co/compan/flan-t5-xxl-te/resolve/main/flan-t5-xxl-TE-BF16.safetensors" #Flan T5 XXL
     	#"https://huggingface.co/Kaoru8/T5XXL-Unchained/resolve/main/t5xxl-unchained-f16.safetensors" #T5 Unchained XXL
-	"https://huggingface.co/compan/clip-models/resolve/main/CLIP-Flan-T5-TE-with-tokenizer-BF16.safetensors" #CLIP Flan T5 XXL TE-only
+	#"https://huggingface.co/compan/clip-models/resolve/main/CLIP-Flan-T5-TE-with-tokenizer-BF16.safetensors" #CLIP Flan T5 XXL TE-only
      	#"https://huggingface.co/compan/llama-3.1-8B-lexi-uncensored-v2-instruct/resolve/main/model.safetensors" #LLama 3.1 Lexi v2 Uncensored
 	#"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/clip_g_hidream.safetensors" #Official clip G
 	#"https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/text_encoders/clip_l_hidream.safetensors" #Official clip L
