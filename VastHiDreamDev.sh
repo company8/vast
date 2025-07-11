@@ -354,7 +354,7 @@ function provisioning_get_nodes() {
                 echo "Updating node: $dir" | tee -a "$DOWNLOAD_LOG"
                 ( cd "$path" && git pull >>"$DOWNLOAD_LOG" 2>&1 )
                 if [[ -e $requirements ]]; then
-                    pip install --no-cache-dir -r "$requirements" 2>&1 | tee -a "$DOWNLOAD_LOG"
+                    pip install --no-cache-dir --verbose -r "$requirements" 2>&1 | tee -a "$DOWNLOAD_LOG"
                 fi
                 echo "✅ Success: $dir" | tee -a "$DOWNLOAD_LOG"
             else
@@ -367,7 +367,7 @@ function provisioning_get_nodes() {
             until $success || ((retries >= MAX_RETRIES)); do
                 if git clone "$repo" "$path" --recursive >>"$DOWNLOAD_LOG" 2>&1; then
                     if [[ -e $requirements ]]; then
-                        pip install --no-cache-dir -r "$requirements" 2>&1 | tee -a "$DOWNLOAD_LOG"
+                        pip install --no-cache-dir --verbose -r "$requirements" 2>&1 | tee -a "$DOWNLOAD_LOG"
                     fi
                     echo "✅ Success: $dir" | tee -a "$DOWNLOAD_LOG"
                     success=true
