@@ -294,7 +294,7 @@ function provisioning_get_pip_packages() {
             if ! $success; then
                 echo "❌ Failed to install: $pkg after $MAX_RETRIES attempts" | tee -a "$DOWNLOAD_LOG"
             fi
-        ) &
+        )
         ((index++))
     done
     echo "✅ All pip packages installed" | tee -a "$DOWNLOAD_LOG"
